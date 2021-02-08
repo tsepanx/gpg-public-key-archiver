@@ -1,0 +1,9 @@
+#! /bin/bash
+
+UNZIP="/bin/unzip"
+
+ex() { $UNZIP $1; }
+# ex folder.zip
+
+decrypt() { gpg --decrypt $1; }
+# decrypt folder.zip.gpg

@@ -1,0 +1,34 @@
+#! /bin/bash
+
+ZIP="/bin/zip"
+
+key=$1
+filename=$2
+new_folder=$3
+res_folder='result_folder'
+
+pk() { $ZIP -r $1.zip $1; }
+# pk folder
+
+encrypt() { gpg -r $1 --encrypt $2; }
+# encrypt mykey@abc.net folder.zip
+
+# pack <gpg_public_key> <existing.zip.gpg> new_folder/
+
+name() { echo "$1_$(date '+%Y%m%d_%H%M')"; }
+rename_folder() { mv $1 $(name $1); echo $(name $1); }
+
+basefile() { echo "${filename%%.*}"; }
+extensions() { echo "${filename#*.}"; }
+
+new_name=$(rename_folder $new_folder)
+
+mkdir $res_folder
+mv $new_name $res_folder
+mv $filename $res_folder
+
+pk $res_folder
+encrypt $1 ${res_folder}.zip
+
+rm -rf ${res_folder}
+rm ${res_folder}.zip
