@@ -5,7 +5,7 @@ ZIP="/bin/zip"
 key=$1
 filename=$2
 new_folder=$3
-res_folder='result'
+res='result_packed'
 
 pk() { $ZIP -r $1.zip $1; }
 # pk folder
@@ -18,17 +18,14 @@ encrypt() { gpg -r $1 --encrypt $2; }
 dated_name() { echo "$1_$(date '+%Y%m%d_%H%M')"; }
 rename_folder() { mv $1 $(dated_name $1); echo $(dated_name $1); }
 
-# basefile() { echo "${filename%%.*}"; }
-# extension() { echo "${filename#*.}"; }
-
 dated_new_folder=$(rename_folder $new_folder)
 
-mkdir $res_folder
-mv $dated_new_folder $res_folder
-mv $filename $res_folder
+mkdir $res
+mv $dated_new_folder $res
+mv $filename $res
 
-pk $res_folder
-encrypt $1 ${res_folder}.zip
+pk $res
+encrypt $1 ${res}.zip
 
-rm -rf ${res_folder}
-rm ${res_folder}.zip
+rm -rf ${res}
+rm ${res}.zip

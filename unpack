@@ -2,8 +2,30 @@
 
 UNZIP="/bin/unzip"
 
+filename=$1
+res="result_unpacked"
+builddir="test"
+
 ex() { $UNZIP $1; }
 # ex folder.zip
 
 decrypt() { gpg --decrypt $1; }
 # decrypt folder.zip.gpg
+
+basefile() { echo "${filename%%.*}"; }
+extension() { echo "${filename#*.}"; }
+
+mkdir $builddir; cd $builddir
+mkdir $res
+
+while true; do
+    decrypt $1
+    decrypted_filename="$(basefile $1).zip"
+    ex $decrypted_filename
+
+    rm $1
+    rm $decrypted_filename
+    # cd TODO should be 1 existing file
+    # TODO separate *.zip.gpg and other dirs
+done
+
