@@ -1,6 +1,8 @@
 # gpg-public-key-archiver
 
-This project purpose is to encrypt data by your public gpg key, 
+A small encryption project, to simplify managing files encryption with `gpg`.
+
+It's purpose is to encrypt data by your public gpg key, 
 and then archiving it to one file, without the need to decrypt it firstly with secret key.
 
 ### Encrypting

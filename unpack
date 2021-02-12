@@ -3,7 +3,7 @@
 UNZIP="/bin/unzip"
 
 filename=$1
-res="result_unpacked"
+res="${PWD}/result_unpacked"
 builddir="test"
 
 ex() { $UNZIP $1; }
@@ -18,14 +18,18 @@ extension() { echo "${filename#*.}"; }
 mkdir $builddir; cd $builddir
 mkdir $res
 
-while true; do
+decrypt_recursive() {
     decrypt $1
     decrypted_filename="$(basefile $1).zip"
     ex $decrypted_filename
 
     rm $1
     rm $decrypted_filename
-    # cd TODO should be 1 existing file
-    # TODO separate *.zip.gpg and other dirs
-done
+    cd $(ls) # TODO should be 1 existing file
 
+    # TODO separate *.zip.gpg and other dirs
+}
+
+while true; do
+
+done
