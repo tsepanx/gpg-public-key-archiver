@@ -1,7 +1,5 @@
 #! /bin/bash
 
-ZIP="/bin/zip"
-
 key=$1
 # filename=$2
 # new_folder=$3
@@ -13,8 +11,9 @@ files=$@
 prefix='PRE'
 build_dir='build'
 
-pk_dir() { $ZIP -r $1.zip $1; }
-pk_files() { $ZIP -r $1 ./*; }
+pk_dir() { zip -r $1.zip $1; }
+pk_files() { zip -r $1 ./*; }
+archived_filename() { echo $1.zip; }
 
 dated_name() { echo "$1_$(date '+%Y%m%d_%H%M')"; }
 encrypt() { gpg -r $1 --encrypt $2; }
@@ -27,27 +26,10 @@ mv $files $build_dir
 
 cd $build_dir
 
-zip_filename=${prefix}$(dated_name result).zip
-pk_files $zip_filename
-encrypt $1 $zip_filename
+packed_filename=$(archived_filename ${prefix}$(dated_name result) )
+pk_files $packed_filename
+encrypt $1 $packed_filename
 
-mv ${zip_filename}.gpg ../
+mv ${packed_filename}.gpg ../
 cd ../
 rm -rf build
-
-# encrypt mykey@abc.net folder.zip
-
-# pack <gpg_public_key_fingerpring> <existing.zip.gpg> new_folder/
-
-# rename_folder() { mv $1 $(dated_name $1); echo $(dated_name $1); }
-# dated_new_folder=$(rename_folder $new_folder)
-
-# mkdir $res
-# mv $dated_new_folder $res
-# mv $filename $res
-
-# pk $res
-# encrypt $1 ${res}.zip
-
-# rm -rf ${res}
-# rm ${res}.zip
